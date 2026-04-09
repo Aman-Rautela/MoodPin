@@ -7,13 +7,24 @@ import {
 } from "../redux/features/searchSlice";
 import { useEffect, useState } from "react";
 import ResultCard from "./ResultCard";
+import {
+  addCollection,
+  addedToast,
+  downloadToast,
+} from "../redux/features/colletionSlice";
 
 const ResultGrid = () => {
   const dispatch = useDispatch();
   const { query, activeTab, result, loading, error } = useSelector(
-    (store) => store.search
+    (store) => store.search,
   );
+
   const [selected, setSelected] = useState(null);
+
+  const addToCollection = (item) => {
+    dispatch(addCollection(item));
+    dispatch(addedToast());
+  };
 
   useEffect(() => {
     if (!query) return;
@@ -112,15 +123,31 @@ const ResultGrid = () => {
             )}
 
             <div className="flex gap-4 mt-4">
-              <button className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 active:scale-95 transition">
+              <button
+                className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 active:scale-95 transition"
+                onClick={() => addToCollection(selected)}
+              >
                 Save
               </button>
               <button
-                onClick={() => {
-                  const link = document.createElement("a");
-                  link.href = selected.src;
-                  link.download = "media";
-                  link.click();
+                onClick={async () => {
+                  console.log(downloadToast)
+                  dispatch(downloadToast());
+                  try {
+                    const response = await fetch(selected.src);
+                    const blob = await response.blob();
+                    const blobUrl = URL.createObjectURL(blob);
+
+                    const link = document.createElement("a");
+                    link.href = blobUrl;
+                    link.download = selected.title || "media";
+                    link.click();
+
+                    URL.revokeObjectURL(blobUrl);
+                    console.log(downloadToast, "completed")
+                  } catch (error) {
+                    console.log("Error in downloading media", error);
+                  }
                 }}
                 className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 active:scale-95 transition"
               >

@@ -15,9 +15,15 @@ const CollectionPage = () => {
 
   return (
     <div className="flex flex-col gap-5 py5">
-      <h1 className="flex items-center justify-center text-2xl font-semibold py-5">
-        Your Collections
-      </h1>
+      {clearCollection.length > 0 ? (
+        <h1 className="flex items-center justify-center text-2xl font-semibold py-5">
+          Your Collections
+        </h1>
+      ) : (
+        <h1 className="flex items-center justify-center text-2xl font-semibold py-5">
+          Empty Collections
+        </h1>
+      )}
       <div className="flex flex-wrap justify-center w-full gap-6 overflow-auto px-5 py-4">
         {collection.map((data, idx) => (
           <div key={idx}>

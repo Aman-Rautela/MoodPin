@@ -52,9 +52,28 @@ const collectionSlice = createSlice({
         transition: Slide,
       });
     },
+    downloadToast: () => {
+      toast.success("Downloading !", {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Slide,
+      });
+    },
   },
 });
 
 export default collectionSlice.reducer;
-export const { addCollection, removeCollection, clearCollection, addedToast, removedToast } =
-  collectionSlice.actions;
+export const {
+  addCollection,
+  removeCollection,
+  clearCollection,
+  addedToast,
+  removedToast,
+  downloadToast,
+} = collectionSlice.actions;
